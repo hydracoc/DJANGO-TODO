@@ -20,7 +20,6 @@ TaskMaster is a sleek, user-friendly todo application built with Django. It help
 
 - 📝 Create, edit, and delete tasks
 - ✅ Mark tasks as complete
-- 🗓️ Set due dates for your tasks
 - 👤 User authentication and personal task lists
 - 🎨 Clean and intuitive user interface
 - 📱 Fully responsive design
