@@ -1,0 +1,52 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskMaster - Register</title>
+    <link rel="stylesheet" href="{% static 'taskmaster/taskstyles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <h1>TaskMaster</h1>
+        <h2>Create an Account</h2>
+        <form class="auth-form" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}"><i class="fas fa-user"></i></label>
+                {{ form.username}}
+            </div>
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope"></i></label>
+                {{ form.email }}
+            </div>
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i></label>
+                {{ form.password1 }}
+            </div>
+            <div class="form-group">
+                <label for="confirm-password"><i class="fas fa-lock"></i></label>
+                {{ form.password2 }}
+            </div>
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+            
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <p class="error-message">{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+
+            
+            <button type="submit" class="auth-btn">Register</button>
+        </form>
+        <p class="auth-link">Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskMaster - Your Todo App</title>
+    <link rel="stylesheet" href="{% static 'taskmaster/taskstyles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <script src="{% static 'taskmaster/taskmaster.js' %}"></script>
+    <header>
+        <nav>
+            <div class="logo">TaskMaster</div>
+            {% if user.is_authenticated %}
+                <h2><b>{{ request.user }}</b></h2>
+            {% endif %}
+            <ul>
+                <li><a href="#" class="active">Tasks</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="{% url 'signout' %}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="todo-container">
+            <h1>My Tasks</h1>
+            <div class="add-task">
+                <form method="post" action="{% url 'create-task' %}">
+                    {% csrf_token %}
+                    <input type="text" placeholder="Add a new task..." name="task" id="task">
+                    <button type="submit" class="add-btn"><i class="fas fa-plus"></i></button>
+                </form>
+            </div>
+            <ul class="todo-list">
+                {% for task in tasks %}
+                    {% if task.completed %}
+                        <li class="completed">
+                            <span class="task-text">{{ task.description }}</span>
+                            <div class="task-actions">
+                                <button class="edit-btn"><i class="fas fa-edit"></i></button>
+                                <form method="post" action="{% url 'delete-task' task.id %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button class="delete-btn"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li>
+                            <span class="task-text">{{ task.description }}</span>
+                            <form method="post" action="{% url 'edit-task' task.id %}" class="edit-form" style="display: none;">
+                                {% csrf_token %}
+                                <input type="text" name="description" value="{{ task.description }}">
+                                <button type="submit" class="save-btn"><i class="fas fa-save"></i></button>
+                                <button type="button" class="cancel-btn"><i class="fas fa-times"></i></button>
+                            </form>
+                            <div class="task-actions">
+                                <button class="edit-btn"><i class="fas fa-edit"></i></button>
+                                <form method="post" action="{% url 'task-complete' task.id %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button class="complete-btn"><i class="fas fa-check"></i></button>
+                                </form>
+                                <form method="post" action="{% url 'delete-task' task.id %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button class="delete-btn"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 TaskMaster. All rights reserved.</p>
+    </footer>
+</body>
+</html>
